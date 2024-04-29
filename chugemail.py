@@ -15,19 +15,22 @@ with open('text.txt', 'r') as file:
 # Extract emails from input text
 emails = extract_emails(input_text)
 
-# Initialize a set to store unique emails
-unique_emails = set()
+# Initialize a list to store unique emails
+unique_emails = []
 
 # Check if output file already exists and read its content
 try:
     with open('output.txt', 'r') as output_file:
         existing_emails = output_file.readlines()
-        unique_emails.update([email.strip() for email in existing_emails])
+        unique_emails.extend([email.strip() for email in existing_emails])
 except FileNotFoundError:
     pass
 
-# Append unique emails to the set
-unique_emails.update(emails)
+# Append unique emails to the list
+unique_emails.extend(email for email in emails if email not in unique_emails)
+
+# Sort the list alphabetically
+unique_emails.sort()
 
 # Write unique emails to the output file
 with open('output.txt', 'w') as output_file:
